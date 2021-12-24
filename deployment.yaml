@@ -18,7 +18,7 @@ spec:
       - name: clock
         image: safernandez666/clock:$JOB_NAME-$BUILD_NUMBER 
         ports:
-        - containerPort: 80
+        - containerPort: 8080
         imagePullPolicy: "Always"
 ---
 
@@ -30,6 +30,6 @@ spec:
   type: LoadBalancer 
   ports:
     - name: http
-      port: 80
+      port: 8080
   selector:
     app: clock
