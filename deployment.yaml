@@ -18,8 +18,7 @@ spec:
       containers:
       - name: nodeserver
         image: safernandez666/clock:$JOB_NAME-$BUILD_NUMBER
-        ports:
-        - containerPort: 3000
+        ports: 80        
         
         
 ---
@@ -30,11 +29,12 @@ metadata:
   name: clock-service
   namespace: safernandez666
 spec:
+  type: ClusterIP
+  # Uncomment the below line to create a Headless Service
+  # clusterIP: None
   selector:
-    app: clock 
-  type: LoadBalancer
+    app: clock
   ports:
   - protocol: TCP
-    port: 5000
-    targetPort: 3000
-    nodePort: 31110
+    port: 80
+    targetPort: 8080
