@@ -2,39 +2,34 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: clock-deployment
-  namespace: safernandez666
   labels:
     app: clock
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: clock
   template:
     metadata:
       labels:
-        app: clock 
+        app: clock
     spec:
       containers:
-      - name: nodeserver
-        image: safernandez666/clock:$JOB_NAME-$BUILD_NUMBER
-        ports: 80        
-        
-        
+      - name: clock
+        image: safernandez666/clock:$JOB_NAME-$BUILD_NUMBER 
+        ports:
+        - containerPort: 80
+        imagePullPolicy: "Always"
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
   name: clock-service
-  namespace: safernandez666
 spec:
-  type: ClusterIP
-  # Uncomment the below line to create a Headless Service
-  # clusterIP: None
+  type: LoadBalancer 
+  ports:
+    - name: http
+      port: 80
   selector:
     app: clock
-  ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 8080
