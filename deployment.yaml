@@ -1,36 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: clock
+  name: clock-deployment
   namespace: safernandez666
+  labels:
+    app: clock
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: clock
-  replicas: 3
   template:
     metadata:
       labels:
-        app: clock
+        app: clock 
     spec:
       containers:
-        - name: clock
-          image: safernandez666/clock:$JOB_NAME-$BUILD_NUMBER
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 80
-  revisionHistoryLimit: 0 
-
+      - name: nodeserver
+        image: safernandez666/clock:$JOB_NAME-$BUILD_NUMBER
+        ports:
+        - containerPort: 3000
+        
+        
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: clock
+  name: clock-service
   namespace: safernandez666
 spec:
   selector:
-    app: clock
-  ports:
-    - port: 80
-      targetPort: 80
+    app: clock 
   type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 3000
+    nodePort: 31110
