@@ -17,6 +17,6 @@ EXPOSE 80
 
 WORKDIR /www
 
-RUN chmod -R 777 /www
+RUN chmod -R 777 $PWD
 
 ENTRYPOINT ["/main.sh"]
