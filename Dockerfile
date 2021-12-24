@@ -17,4 +17,6 @@ EXPOSE 80
 
 WORKDIR /www
 
+RUN chmod +x main.sh
+
 ENTRYPOINT ["/main.sh"]
