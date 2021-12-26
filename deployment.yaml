@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: clock
-        image: safernandez666/clock:$JOB_NAME-$BUILD_NUMBER 
+        image: safernandez666/clock:latest 
         ports:
         - containerPort: 8080
         imagePullPolicy: "Always"
