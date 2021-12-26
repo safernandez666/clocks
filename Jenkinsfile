@@ -2,6 +2,7 @@ pipeline {
 
   environment {
     dockerimagename = "safernandez666/clock"
+    dockerImage = ""
   }
 
   agent any
@@ -10,7 +11,7 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
- 	      checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/safernandez666/clock.git']]])
+ 	      checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/safernandez666/clocks.git']]])
       }
     }
 
@@ -30,6 +31,7 @@ pipeline {
         script {
           docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
             dockerImage.push("latest")
+            dockerImage.push("$JOB_NAME-$BUILD_NUMBER")
           }
         }
       }
@@ -38,7 +40,7 @@ pipeline {
     stage('Deploying App to Kubernetes') {
       steps {
         script {
-          kubernetesDeploy(configs: "deployment.yml", kubeconfigId: "Okteto")
+          kubernetesDeploy(enableConfigSubstitution: true, configs: "deployment.yaml", kubeconfigId: "Okteto")
         }
       }
     }
